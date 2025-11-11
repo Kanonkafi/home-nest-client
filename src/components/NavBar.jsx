@@ -1,26 +1,42 @@
-
-import { useContext,useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router";
-
+import { useContext, useState, useEffect, useRef } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
-  const { user, logOut } = useContext(AuthContext);
+  const { user, logOut,loading } = useContext(AuthContext);
   const [isDark, setIsDark] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
+  const profileRef = useRef(null);
 
   const toggleTheme = () => {
     setIsDark(!isDark);
     document.documentElement.classList.toggle("dark");
   };
 
- const handleLogout = () => {
+  const handleLogout = () => {
     logOut()
-      .then(() => navigate("/"))
+      .then(() => { navigate("/");
+        toast.success("Logout Successful ");})
       .catch((err) => console.error(err));
   };
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setProfileOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   const navLinks = (
     <>
@@ -46,49 +62,63 @@ const NavBar = () => {
       )}
     </>
   );
-
+  if (loading) {
+    
+    return null
+  }
   return (
-    <nav className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-lg rounded-2xl mt-4 transition-all backdrop-blur-md">
+    <nav className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-lg rounded-2xl mt-4 transition-all backdrop-blur-md z-50 relative">
       <div className="w-full flex justify-between items-center py-4 px-6">
-        {/* Logo */}
+
         <Link to="/" className="text-3xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
           HomeNest
         </Link>
 
-        {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6 font-medium">{navLinks}</ul>
 
         <div className="flex items-center space-x-3">
-          {/* Dark Mode */}
+
           <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          {/* Auth Buttons */}
           {!user ? (
             <div className="hidden md:flex space-x-2">
               <Link to="/login" className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold hover:opacity-90 transition">Login</Link>
               <Link to="/register" className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:opacity-90 transition">Signup</Link>
             </div>
           ) : (
-            <div className="relative group">
-              <img src={user.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"} alt="user" className="w-10 h-10 rounded-full cursor-pointer border-2 border-purple-400" />
+            <div ref={profileRef} className="relative">
+              <img
+                onClick={() => setProfileOpen(!profileOpen)}
+                src={user.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"}
+                alt="user"
+                className="w-10 h-10 rounded-full cursor-pointer border-2 border-purple-400"
+              />
 
-              <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all">
-                <div className="p-3 border-b border-gray-200 dark:border-gray-700">
-                  <p className="font-semibold text-gray-800 dark:text-gray-100">{user.displayName}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
+              {profileOpen && (
+                <div className="absolute right-0 mt-3 w-56 bg-gradient-to-br from-gray-900 via-purple-900 to-pink-900 text-white rounded-xl shadow-xl p-4 z-50 animate-fadeIn">
+                  <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                    <p className="font-semibold text-white dark:text-gray-100">{user.displayName}</p>
+                    <p className="text-sm text-white dark:text-gray-400">{user.email}</p>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-center px-4 py-2 rounded-lg 
+                             bg-gradient-to-r from-purple-500 to-pink-500 
+                             text-white font-semibold hover:opacity-90 transition"
+                  >
+                    Log out
+                  </button>
                 </div>
-                <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg">
-                  Log out
-                </button>
-              </div>
+              )}
             </div>
           )}
 
           <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
+
         </div>
       </div>
 

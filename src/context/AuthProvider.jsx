@@ -7,8 +7,10 @@ import {
   signInWithPopup, 
   GoogleAuthProvider, 
   signOut, 
-  onAuthStateChanged 
+  onAuthStateChanged, 
+  updateProfile
 } from "firebase/auth";
+
 
 
 
@@ -19,10 +21,18 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   //  Register user
-  const register = (email, password) => {
+  const register = (name, email, password, photoURL) => {
     setLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password);
+    return createUserWithEmailAndPassword(auth, email, password)
+      .then((res) => {
+        return updateProfile(res.user, {
+          displayName: name,
+          photoURL: photoURL
+        });
+      });
   };
+
+
 
   //  Login user
   const login = (email, password) => {
@@ -37,7 +47,7 @@ const AuthProvider = ({ children }) => {
   };
 
   //  Logout user
-  const logout = () => {
+  const logOut = () => {
     setLoading(true);
     return signOut(auth);
   };
@@ -50,6 +60,7 @@ const AuthProvider = ({ children }) => {
     });
     return () => unsubscribe();
   }, []);
+    const updateUserProfile = (profile) => updateProfile(auth.currentUser, profile);
 
   const authInfo = {
     user,
@@ -57,7 +68,8 @@ const AuthProvider = ({ children }) => {
     register,
     login,
     googleSignIn,
-    logout,
+    logOut,
+    updateUserProfile
   };
 
   return (

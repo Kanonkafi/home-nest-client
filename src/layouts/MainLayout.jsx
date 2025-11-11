@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import { ToastContainer } from "react-toastify";
 
 const MainLayout = () => {
   const location = useLocation();
@@ -23,7 +24,20 @@ const MainLayout = () => {
         <div className="w-11/12 max-w-7xl mx-auto mt-8">
           <Footer />
         </div>
+
       )}
+      <ToastContainer
+        position="top-center" 
+        autoClose={3000} 
+        hideProgressBar={false} 
+        newestOnTop={false} 
+        closeOnClick 
+        rtl={false} 
+        pauseOnFocusLoss 
+        draggable 
+        pauseOnHover 
+        theme="colored" // আপনার পছন্দের থিম দিন
+      />
     </div>
   );
 };
