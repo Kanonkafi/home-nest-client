@@ -18,8 +18,9 @@ const Home = () => {
       <WhyChooseUs />
 
       {/* Extra Sections */}
-      <InvestmentTips />
+     
       <CustomerStories />
+       <InvestmentTips />
     </div>
   );
 };

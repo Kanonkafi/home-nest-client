@@ -25,3 +25,6 @@ html {
   color-scheme: light dark;
   transition: background-color 0.3s, color 0.3s;
 }
+html {
+  scroll-behavior: smooth;
+}
