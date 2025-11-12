@@ -36,7 +36,7 @@ const MainLayout = () => {
         pauseOnFocusLoss 
         draggable 
         pauseOnHover 
-        theme="colored" // আপনার পছন্দের থিম দিন
+        theme="colored" //
       />
     </div>
   );

@@ -10,6 +10,7 @@ import Register from "../auth/Register";
 import PropertyDetails from "../pages/PropertyDetails";
 import ErrorPage from "../pages/ErrorPage";
 import PrivateRoute from "./PrivateRoute";
+import UpdateProperty from "../pages/UpdateProperty";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,16 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+
+      {
+          path: "/update-property/:id",
+                    
+          element: <PrivateRoute>
+            <UpdateProperty />
+            </PrivateRoute>,
+          
+        },
+
       {
         path: "/my-ratings",
         element: (
