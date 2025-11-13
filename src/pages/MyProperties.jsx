@@ -7,19 +7,21 @@ import { AuthContext } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 const MyProperties = () => {
-  const { user } = useContext(AuthContext);
+  const { user} = useContext(AuthContext);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+
   useEffect(() => {
     if (!user) return;
-
-    fetch(`http://localhost:3000/my-properties?email=${user.email}`, {
-      headers: {
-        authorization: `Bearer ${user.accessToken}`,
-      },
-    })
+    
+     
+      fetch(`http://localhost:3000/my-properties?email=${user.email}`, {
+        headers: {
+         authorization: `Bearer ${user.accessToken}`,
+       },
+     })
       .then((res) => res.json())
       .then((data) => {
         setProperties(data);
@@ -27,6 +29,9 @@ const MyProperties = () => {
       })
       .catch((err) => console.error(err));
   }, [user]);
+
+ 
+  
 
   // Delete Function
   const handleDelete = (id) => {
@@ -70,9 +75,9 @@ const MyProperties = () => {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600 py-16 px-6">
+    <div className="min-h-fit bg-gradient-to-br from-[#06251a] via-[#7a3494] to-[#581458] py-16 px-6 rounded-2xl">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold text-white text-center mb-12">
+        <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent text-center mb-12">
           My Properties
         </h2>
 
@@ -118,14 +123,14 @@ const MyProperties = () => {
 
                   <button
                     onClick={() => handleDelete(property._id)}
-                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-red-500 to-pink-600 text-white font-medium shadow-md hover:opacity-90"
+                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 text-white font-medium shadow-md hover:opacity-90"
                   >
                     Delete
                   </button>
 
                   <button
                     onClick={() => navigate(`/properties/${property._id}`)}
-                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-green-400 to-emerald-500 text-white font-medium shadow-md hover:opacity-90"
+                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-green-400 via-purple-500 to-pink-500 text-white font-medium shadow-md hover:opacity-90"
                   >
                     View
                   </button>

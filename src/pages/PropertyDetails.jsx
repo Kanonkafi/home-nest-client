@@ -80,7 +80,7 @@ const PropertyDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 py-16 px-4 md:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 py-16 px-4 md:px-8 rounded-2xl">
       <div className="max-w-5xl mx-auto backdrop-blur-xl bg-white/10 p-8 rounded-3xl shadow-2xl border border-white/20 text-white">
         <div className="flex flex-col lg:flex-row gap-8">
           <img
@@ -195,7 +195,9 @@ const PropertyDetails = () => {
             <p className="text-white/80">No reviews yet.</p>
           )}
         </div>
+        
       </div>
+      
     </div>
   );
 };

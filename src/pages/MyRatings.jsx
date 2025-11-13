@@ -28,7 +28,7 @@ const MyRatings = () => {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 py-16 px-4 md:px-8">
+    <div className="min-h-fit bg-gradient-to-r from-green-400 via-purple-500 to-pink-400  py-16 px-4 md:px-8 rounded-2xl">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-4xl font-bold text-white text-center mb-10">
           My Ratings & Reviews

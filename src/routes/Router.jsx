@@ -44,13 +44,19 @@ const router = createBrowserRouter([
       },
 
       {
-          path: "/update-property/:id",
-                    
-          element: <PrivateRoute>
+       path: "/update-property/:id",
+         element: (
+           <PrivateRoute>
             <UpdateProperty />
-            </PrivateRoute>,
-          
+            </PrivateRoute>
+         ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/properties/${params.id}`, {
+             headers: {
+             authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
+      }),
+    },
 
       {
         path: "/my-ratings",

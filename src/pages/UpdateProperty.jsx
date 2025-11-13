@@ -4,8 +4,8 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const UpdateProperty = () => {
-  const { user } = useContext(AuthContext);
   const property = useLoaderData();
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleUpdate = (e) => {
@@ -21,20 +21,23 @@ const UpdateProperty = () => {
       image: form.image.value,
     };
 
-    fetch(`http://localhost:3000/properties/${property._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${user.accessToken}`,
-      },
-      body: JSON.stringify(updatedProperty),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        toast.success("Property updated successfully!");
-        navigate(`/properties/${property._id}`);
+    // Access Token নাও Firebase থেকে
+    user.getIdToken().then((token) => {
+      fetch(`http://localhost:3000/properties/${property._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedProperty),
       })
-      .catch(() => toast.error("Update failed! Try again."));
+        .then((res) => res.json())
+        .then(() => {
+          toast.success(" Property updated successfully!");
+          navigate(`/properties/${property._id}`);
+        })
+        .catch(() => toast.error("Update failed! Try again."));
+    });
   };
 
   if (!property) {
@@ -109,13 +112,13 @@ const UpdateProperty = () => {
         <div className="grid md:grid-cols-2 gap-4 mt-4">
           <input
             type="text"
-            value={user.displayName}
+            value={user?.displayName || ""}
             readOnly
             className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 border border-gray-300"
           />
           <input
             type="email"
-            value={user.email}
+            value={user?.email || ""}
             readOnly
             className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 border border-gray-300"
           />

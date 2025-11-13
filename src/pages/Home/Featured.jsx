@@ -28,11 +28,11 @@ const Featured = () => {
         Featured Real Estates
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 ">
         {properties.map((property) => (
           <div
             key={property._id}
-            className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100"
+            className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col"
           >
             {/* Image section */}
             <div className="overflow-hidden relative group">
@@ -49,7 +49,7 @@ const Featured = () => {
             </div>
 
             {/* Content section */}
-            <div className="p-6 space-y-3">
+            <div className="p-6 space-y-3 flex flex-col flex-grow">
               <h3 className="text-xl font-semibold text-gray-800 hover:text-indigo-600 transition">
                 {property.propertyName}
               </h3>
@@ -71,7 +71,7 @@ const Featured = () => {
               </div>
 
               {/* Button */}
-              <div className="pt-4">
+              <div className="pt-4 mt-auto">
                 <Link
                   to={`/properties/${property._id}`}
                   className="inline-block bg-gradient-to-r from-indigo-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:opacity-90 transition"
