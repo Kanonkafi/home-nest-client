@@ -19,7 +19,7 @@ const PropertyDetails = () => {
   useEffect(() => {
     if (!user) return;
 
-    fetch(`http://localhost:3000/properties/${id}`, {
+    fetch(`https://home-nest-api-server.vercel.app/properties/${id}`, {
       headers: {
         authorization: `Bearer ${user.accessToken}`,
       },
@@ -33,7 +33,7 @@ const PropertyDetails = () => {
 
   // Fetch reviews for this property
   useEffect(() => {
-    fetch(`http://localhost:3000/reviews/${id}`)
+    fetch(`https://home-nest-api-server.vercel.app/reviews/${id}`)
       .then((res) => res.json())
       .then((data) => setReviews(data.reverse()));
   }, [id, refetch]);
@@ -53,7 +53,7 @@ const PropertyDetails = () => {
   reviewerPhoto: user.photoURL || "",
     };
 
-    fetch(`http://localhost:3000/reviews`, {
+    fetch(`https://home-nest-api-server.vercel.app/reviews`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

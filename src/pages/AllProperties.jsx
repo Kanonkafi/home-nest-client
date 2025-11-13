@@ -9,7 +9,7 @@ const AllProperties = () => {
 
   // load all properties initially
   useEffect(() => {
-    fetch("http://localhost:3000/properties")
+    fetch("https://home-nest-api-server.vercel.app/properties")
       .then((res) => res.json())
       .then((data) => setProperties(data));
        setLoading(false);
@@ -21,7 +21,7 @@ const AllProperties = () => {
     const search_text = e.target.search.value;
     setLoading(true);
 
-    fetch(`http://localhost:3000/properties?search=${search_text}`)
+    fetch(`https://home-nest-api-server.vercel.app/properties?search=${search_text}`)
       .then((res) => res.json())
       .then((data) => {
         setProperties(data);
@@ -35,7 +35,7 @@ const AllProperties = () => {
     setSortBy(value);
     setLoading(true);
 
-    fetch(`http://localhost:3000/properties?sortBy=${value}`)
+    fetch(`https://home-nest-api-server.vercel.app/properties?sortBy=${value}`)
       .then((res) => res.json())
       .then((data) => {
         setProperties(data);

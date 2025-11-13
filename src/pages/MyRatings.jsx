@@ -10,7 +10,7 @@ const MyRatings = () => {
   useEffect(() => {
     if (!user) return;
 
-    fetch(`http://localhost:3000/my-reviews?email=${user.email}`, {
+    fetch(`https://home-nest-api-server.vercel.app/my-reviews?email=${user.email}`, {
       headers: {
         authorization: `Bearer ${user.accessToken}`,
       },

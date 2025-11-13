@@ -51,7 +51,7 @@ const router = createBrowserRouter([
             </PrivateRoute>
          ),
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/properties/${params.id}`, {
+          fetch(`https://home-nest-api-server.vercel.app/properties/${params.id}`, {
              headers: {
              authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },

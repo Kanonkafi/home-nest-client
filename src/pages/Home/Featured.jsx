@@ -7,7 +7,7 @@ const Featured = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/latest-properties")
+    fetch("https://home-nest-api-server.vercel.app/latest-properties")
       .then((res) => res.json())
       .then((data) => {
         setProperties(data);

@@ -23,7 +23,7 @@ const UpdateProperty = () => {
 
     // Access Token নাও Firebase থেকে
     user.getIdToken().then((token) => {
-      fetch(`http://localhost:3000/properties/${property._id}`, {
+      fetch(`https://home-nest-api-server.vercel.app/properties/${property._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -17,7 +17,7 @@ const MyProperties = () => {
     if (!user) return;
     
      
-      fetch(`http://localhost:3000/my-properties?email=${user.email}`, {
+      fetch(`https://home-nest-api-server.vercel.app/my-properties?email=${user.email}`, {
         headers: {
          authorization: `Bearer ${user.accessToken}`,
        },
@@ -47,7 +47,7 @@ const MyProperties = () => {
       color: "#fff",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/properties/${id}`, {
+        fetch(`https://home-nest-api-server.vercel.app/properties/${id}`, {
           method: "DELETE",
           headers: {
             authorization: `Bearer ${user.accessToken}`,

@@ -24,7 +24,7 @@ const AddProperty = () => {
     };
 
     
-    fetch("http://localhost:3000/properties", {
+    fetch("https://home-nest-api-server.vercel.app/properties", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
