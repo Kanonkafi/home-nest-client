@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const AllProperties = () => {
   const [properties, setProperties] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState(""); // price or date
 
   // load all properties initially
@@ -11,6 +12,7 @@ const AllProperties = () => {
     fetch("http://localhost:3000/properties")
       .then((res) => res.json())
       .then((data) => setProperties(data));
+       setLoading(false);
   }, []);
 
   // search handler (like your AllModels)
@@ -43,9 +45,7 @@ const AllProperties = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-10 text-lg font-medium text-gray-600">
-        Please wait ... Loading Properties...
-      </div>
+      <LoadingSpinner></LoadingSpinner>
     );
   }
 

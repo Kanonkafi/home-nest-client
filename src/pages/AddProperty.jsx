@@ -86,7 +86,7 @@ const AddProperty = () => {
             <select
               name="category"
               required
-              className="w-full rounded-full px-5 py-3 bg-white/20 text-white focus:outline-none focus:ring-2 focus:ring-pink-400"
+              className="w-full rounded-full px-5 py-3 bg-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-pink-400"
             >
               <option value="" disabled selected>Select category</option>
               <option value="Rent">Rent</option>

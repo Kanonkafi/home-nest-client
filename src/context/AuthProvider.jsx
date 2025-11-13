@@ -1,15 +1,19 @@
+
 import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { auth } from "../firebase/firebase.init";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signOut,
-  onAuthStateChanged,
-  updateProfile,
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  signOut, 
+  onAuthStateChanged, 
+  updateProfile
 } from "firebase/auth";
+
+
+
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -17,59 +21,47 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Register user
+  //  Register user
   const register = (name, email, password, photoURL) => {
     setLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password).then(
-      (res) => {
+    return createUserWithEmailAndPassword(auth, email, password)
+      .then((res) => {
         return updateProfile(res.user, {
           displayName: name,
-          photoURL: photoURL,
+          photoURL: photoURL
         });
-      }
-    );
+      });
   };
 
-  // ✅ Login user
+
+
+  //  Login user
   const login = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // ✅ Google Sign-in
+  //  Google Sign-in
   const googleSignIn = () => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
-  // ✅ Logout user
+  //  Logout user
   const logOut = () => {
     setLoading(true);
-    localStorage.removeItem("access-token"); // clear token
     return signOut(auth);
   };
 
-  // ✅ Update profile
-  const updateUserProfile = (profile) =>
-    updateProfile(auth.currentUser, profile);
-
-  // ✅ Listen for user state + set Firebase ID token in localStorage
+  //  Track auth state change
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
-
-      if (currentUser) {
-        // get Firebase verified token
-        const token = await currentUser.getIdToken();
-        localStorage.setItem("access-token", token);
-      } else {
-        localStorage.removeItem("access-token");
-      }
     });
-
     return () => unsubscribe();
   }, []);
+    const updateUserProfile = (profile) => updateProfile(auth.currentUser, profile);
 
   const authInfo = {
     user,
@@ -78,7 +70,7 @@ const AuthProvider = ({ children }) => {
     login,
     googleSignIn,
     logOut,
-    updateUserProfile,
+    updateUserProfile
   };
 
   return (

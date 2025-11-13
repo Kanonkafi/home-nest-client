@@ -1,154 +1,134 @@
-import { useEffect, useState, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
-
 const UpdateProperty = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  const [property, setProperty] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const property = useLoaderData();
+  const navigate = useNavigate();
 
-  // ✅ Fetch property details securely
-  useEffect(() => {
-    if (!user) return; // wait for user
-    fetch(`http://localhost:3000/properties/${id}`, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("access-token")}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load property");
-        return res.json();
-      })
-      .then((data) => {
-        setProperty(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error("Failed to load property!");
-      });
-  }, [id, user]);
-
-  // ✅ Handle update submit
-  const handleSubmit = (e) => {
+  const handleUpdate = (e) => {
     e.preventDefault();
-    const formData = {
-      propertyName: e.target.propertyName?.value,
-      category: e.target.category?.value,
-      description: e.target.description?.value,
-      price: e.target.price?.value,
-      location: e.target.location?.value,
-      image: e.target.image?.value,
+    const form = e.target;
+
+    const updatedProperty = {
+      propertyName: form.propertyName.value,
+      description: form.description.value,
+      category: form.category.value,
+      price: parseFloat(form.price.value),
+      location: form.location.value,
+      image: form.image.value,
     };
 
-    fetch(`http://localhost:3000/properties/${id}`, {
+    fetch(`http://localhost:3000/properties/${property._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("access-token")}`,
+        authorization: `Bearer ${user.accessToken}`,
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(updatedProperty),
     })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to update property");
-        return res.json();
-      })
+      .then((res) => res.json())
       .then(() => {
-        toast.success("✅ Property updated successfully!");
-        navigate(`/property/${id}`);
+        toast.success("Property updated successfully!");
+        navigate(`/properties/${property._id}`);
       })
-      .catch((err) => {
-        console.error(err);
-        toast.error("Update failed! Try again.");
-      });
+      .catch(() => toast.error("Update failed! Try again."));
   };
-
-  if (loading) {
-    return (
-      <div className="text-white text-center mt-20">Loading property...</div>
-    );
-  }
 
   if (!property) {
     return (
-      <div className="text-red-400 text-center mt-20">
-        Property not found or unauthorized!
+      <div className="min-h-screen flex items-center justify-center text-white text-lg bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
+        Please wait ... Loading Property Data...
       </div>
     );
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-[#0a0731] via-[#0d0b45] to-[#1a1458] py-16 px-4 flex items-center justify-center">
-      <div className="w-full max-w-3xl bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl shadow-[0_0_25px_rgba(255,255,255,0.15)] p-8 md:p-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-8">
+    <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 py-12 px-6">
+      <form
+        onSubmit={handleUpdate}
+        className="w-full max-w-3xl p-8 bg-white/90 text-gray-900 rounded-2xl shadow-2xl"
+      >
+        <h2 className="text-3xl font-bold mb-6 text-center text-indigo-700">
           Update Property
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid md:grid-cols-2 gap-4">
           <input
             type="text"
             name="propertyName"
             defaultValue={property.propertyName}
-            required
             placeholder="Property Name"
-            className="w-full rounded-full px-5 py-3 bg-white/20 text-white placeholder-gray-300 focus:ring-2 focus:ring-pink-400"
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-indigo-600"
+            required
           />
-
-          <textarea
-            name="description"
-            defaultValue={property.description}
-            rows="4"
-            className="w-full rounded-2xl px-5 py-3 bg-white/20 text-white placeholder-gray-300 focus:ring-2 focus:ring-pink-400"
-          ></textarea>
-
-          <select
+          <input
+            type="text"
             name="category"
             defaultValue={property.category}
-            className="w-full rounded-full px-5 py-3 bg-white/20 text-white focus:ring-2 focus:ring-pink-400"
-          >
-            <option value="Rent">Rent</option>
-            <option value="Sale">Sale</option>
-            <option value="Commercial">Commercial</option>
-            <option value="Land">Land</option>
-          </select>
-
+            placeholder="Category"
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-indigo-600"
+            required
+          />
           <input
             type="number"
             name="price"
             defaultValue={property.price}
             placeholder="Price"
-            className="w-full rounded-full px-5 py-3 bg-white/20 text-white placeholder-gray-300 focus:ring-2 focus:ring-pink-400"
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-indigo-600"
+            required
           />
-
           <input
             type="text"
             name="location"
             defaultValue={property.location}
             placeholder="Location"
-            className="w-full rounded-full px-5 py-3 bg-white/20 text-white placeholder-gray-300 focus:ring-2 focus:ring-pink-400"
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-indigo-600"
+            required
           />
-
           <input
-            type="url"
+            type="text"
             name="image"
             defaultValue={property.image}
-            placeholder="Image URL"
-            className="w-full rounded-full px-5 py-3 bg-white/20 text-white placeholder-gray-300 focus:ring-2 focus:ring-pink-400"
+            placeholder="Image Link"
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-indigo-600"
           />
+        </div>
 
-          <button
-            type="submit"
-            className="w-full py-3 mt-6 font-semibold text-lg rounded-full bg-gradient-to-r from-indigo-500 to-pink-500 hover:opacity-90 transition text-white shadow-[0_0_20px_#7b38ff]"
-          >
-            Update Property
-          </button>
-        </form>
-      </div>
-    </section>
+        <textarea
+          name="description"
+          defaultValue={property.description}
+          placeholder="Description"
+          className="w-full mt-4 px-4 py-2 rounded-lg border border-gray-300 focus:outline-indigo-600"
+          rows="4"
+          required
+        ></textarea>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-4">
+          <input
+            type="text"
+            value={user.displayName}
+            readOnly
+            className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 border border-gray-300"
+          />
+          <input
+            type="email"
+            value={user.email}
+            readOnly
+            className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 border border-gray-300"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="mt-6 w-full py-3 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-semibold shadow-md hover:opacity-90 transition"
+        >
+          Update Property
+        </button>
+      </form>
+    </div>
   );
 };
 

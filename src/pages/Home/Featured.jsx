@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const Featured = () => {
   const [properties, setProperties] = useState([]);
@@ -17,9 +18,7 @@ const Featured = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-10 text-lg font-medium text-gray-600">
-        Please wait ... Loading Featured Properties...
-      </div>
+      <LoadingSpinner></LoadingSpinner>
     );
   }
 
